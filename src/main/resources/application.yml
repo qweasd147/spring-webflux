@@ -1,9 +1,15 @@
+logging:
+  level:
+    org.springframework.data.r2dbc: DEBUG
+
+
 spring:
-  jpa:
-    database: h2
-    hibernate:
-      ddl-auto: create-drop
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
+  datasource:
+    platform: init
+    initialization-mode: always
+
+#spring:
+#  r2dbc:
+#    url: r2dbc:h2:mem:///test?options=DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+#    name: sa
+#    password:
