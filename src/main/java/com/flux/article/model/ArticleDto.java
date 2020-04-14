@@ -4,10 +4,27 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import javax.validation.constraints.NotBlank;
 
 public class ArticleDto {
+
+    @Getter
+    @NoArgsConstructor(access = AccessLevel.PROTECTED)
+    public static class findAllRequest {
+
+        private int page = 0;
+        private int size = 16;
+        private String sort = "idx";
+
+
+        public Pageable toPageable(){
+            return PageRequest.of(this.page,this.size, Sort.Direction.DESC, sort);
+        }
+    }
 
     @Getter
     @NoArgsConstructor(access = AccessLevel.PROTECTED)

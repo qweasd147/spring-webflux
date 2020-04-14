@@ -5,9 +5,8 @@ import com.flux.article.model.Article;
 import com.flux.article.model.ArticleDto;
 import com.flux.article.service.ArticleService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -18,8 +17,9 @@ public class ArticleController {
     private final ArticleService articleService;
 
     @GetMapping
-    public Flux<Article> findAll(Pageable pageable){
-        return articleService.findAll(pageable);
+    public Mono<Page<Article>> findAll(ArticleDto.findAllRequest findAllRequest){
+
+        return articleService.findAllToPage(findAllRequest.toPageable());
     }
 
     @GetMapping("/{articleIdx}")

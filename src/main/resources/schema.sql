@@ -1,4 +1,4 @@
-create table IF NOT EXISTS `user` (
+create table IF NOT EXISTS `article` (
   `idx` bigint(20) NOT NULL AUTO_INCREMENT,
   `subject` varchar(255) NOT NULL,
   `contents` LONGVARCHAR NOT NULL,
