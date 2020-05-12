@@ -19,8 +19,8 @@ public class ArticleService {
 
     private final ArticleRepository articleRepository;
 
-    public Flux<Article> findAll(Pageable pageable){
-        return articleRepository.findAll(pageable);
+    public Flux<Article> findAll(){
+        return articleRepository.findAll();
     }
 
     public Mono<Page<Article>> findAllToPage(Pageable pageable) {

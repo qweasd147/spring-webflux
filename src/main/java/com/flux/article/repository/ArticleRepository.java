@@ -21,6 +21,15 @@ public class ArticleRepository {
 
     private final DatabaseClient databaseClient;
 
+    public Flux<Article> findAll(){
+
+        return databaseClient
+                .select()
+                .from(Article.class)
+                .fetch()
+                .all();
+    }
+
     public Flux<Article> findAll(Pageable pageable){
 
         return databaseClient
@@ -28,7 +37,8 @@ public class ArticleRepository {
                 .from(Article.class)
                 .page(pageable)
                 .fetch()
-                .all();
+                .all()
+                .log();
     }
 
     public Mono<Long> getTotalArticleCount(){
@@ -53,14 +63,14 @@ public class ArticleRepository {
                 );
     }
 
-    public void create(Article article){
+    public Mono<Article> create(Article article){
 
-        Mono<Void> result2 = databaseClient.insert()
+        databaseClient.insert()
                 .into(Article.class)
                 .using(article)
-                .then();
+                .then().log();
 
-        log.info("insert success");
+        return Mono.just(article);
     }
 
     public void update(Article article){
@@ -68,18 +78,16 @@ public class ArticleRepository {
         Mono<Void> result = databaseClient.update()
                 .table(Article.class)
                 .using(article)
-                .then();
+                .then().log();
 
         log.info("update success");
     }
 
-    public void delete(Long articleIdx){
+    public Mono<Void> delete(Long articleIdx){
 
-        Mono<Void> result = databaseClient.delete()
+        return databaseClient.delete()
                 .from(Article.class)
                 .matching(where("idx").is(articleIdx))
-                .then();
-
-        log.info("delete success");
+                .then().log();
     }
 }
