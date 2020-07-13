@@ -3,11 +3,10 @@ package com.flux.article.repository;
 import com.flux.article.model.Article;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.r2dbc.core.DatabaseClient;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -17,6 +16,7 @@ import static org.springframework.data.r2dbc.query.Criteria.where;
 @RequiredArgsConstructor
 @Repository
 @Slf4j
+@Transactional
 public class ArticleRepository {
 
     private final DatabaseClient databaseClient;
@@ -68,26 +68,32 @@ public class ArticleRepository {
         databaseClient.insert()
                 .into(Article.class)
                 .using(article)
-                .then().log();
+                .fetch().one().subscribe();
 
         return Mono.just(article);
     }
 
+
     public void update(Article article){
 
-        Mono<Void> result = databaseClient.update()
+        databaseClient.update()
                 .table(Article.class)
                 .using(article)
-                .then().log();
+                .fetch()
+                .rowsUpdated();
 
         log.info("update success");
+
+        Mono.empty();
     }
 
     public Mono<Void> delete(Long articleIdx){
 
-        return databaseClient.delete()
+        databaseClient.delete()
                 .from(Article.class)
                 .matching(where("idx").is(articleIdx))
-                .then().log();
+                .fetch().rowsUpdated();
+
+        return Mono.empty();
     }
 }

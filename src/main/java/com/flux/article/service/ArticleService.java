@@ -37,8 +37,8 @@ public class ArticleService {
         return articleRepository.findByIdx(articleIdx);
     }
 
-    public void createOne(ArticleDto.CreateRequest createRequest){
+    public Mono<Article> createOne(ArticleDto.CreateRequest createRequest){
 
-        articleRepository.create(createRequest.toEntity());
+        return articleRepository.create(createRequest.toEntity());
     }
 }

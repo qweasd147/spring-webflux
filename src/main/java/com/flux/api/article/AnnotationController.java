@@ -28,10 +28,8 @@ public class AnnotationController {
     }
 
     @PostMapping
-    public Mono<Void> create(ArticleDto.CreateRequest createRequest){
+    public Mono<Article> create(ArticleDto.CreateRequest createRequest){
 
-        articleService.createOne(createRequest);
-
-        return Mono.empty();
+        return articleService.createOne(createRequest);
     }
 }
